@@ -1,5 +1,6 @@
 const { users } = require("../models");
 const utils = require("../utils");
+const nodemailer = require("nodemailer");
 
 module.exports = {
 	register: async (req, res) => {
@@ -44,21 +45,49 @@ module.exports = {
 
 			if (!findUser) {
 				return res.render("error", {
-					errorMessage: "An error occurred",
+					errorMessage: "User not found",
 				});
 			}
 
+			const resetPasswordToken = await utils.cryptPassword(req.body.email);
+
 			await users.update({
 				data: {
-					resetPasswordToken: await utils.cryptPassword(req.body.email),
+					resetPasswordToken,
 				},
 				where: {
 					id: findUser.id,
 				},
 			});
 
-			return res.render("success", {
-				successMessage: "Password reset link was sent to your email!",
+			const transporter = nodemailer.createTransport({
+				host: "sandbox.smtp.mailtrap.io",
+				port: 2525,
+				secure: false,
+				auth: {
+					user: process.env.EMAIL_USER,
+					pass: process.env.EMAIL_PASSWORD,
+				},
+			});
+
+			const mailOptions = {
+				from: "system@gmail.com",
+				to: req.body.email,
+				subject: "Reset Password",
+				html: `<p>Reset Password <a href="http://localhost:3000/set-password/${resetPasswordToken}">Click Here</a></p>`,
+			};
+
+			transporter.sendMail(mailOptions, (err) => {
+				if (err) {
+					console.log(err);
+					return res.render("error", {
+						errorMessage: "Invalid or expired reset key!",
+					});
+				}
+
+				return res.render("success", {
+					successMessage: "Password reset link was sent to your email!",
+				});
 			});
 		} catch (error) {
 			console.log(error);
@@ -78,7 +107,7 @@ module.exports = {
 
 			if (!findUser) {
 				return res.render("error", {
-					errorMessage: "Data not found!",
+					errorMessage: "Invalid or expired reset key!",
 				});
 			}
 
@@ -93,12 +122,12 @@ module.exports = {
 			});
 
 			return res.render("success", {
-				successMessage: "Reset password was successfully!",
+				successMessage: "Password reset was successfully!",
 			});
 		} catch (error) {
 			console.log(error);
-			return res.status(500).json({
-				error,
+			return res.render("error", {
+				errorMessage: "An error occurred",
 			});
 		}
 	},
