@@ -1,7 +1,7 @@
 # express-auth-api
 Implement nodemailer to sent password reset link and push notification to user email.
 
-### Dependencies i use
+## Dependencies i use
 - ExpressJS
 - PrismaJS
 - PostgreSQL
@@ -10,7 +10,42 @@ Implement nodemailer to sent password reset link and push notification to user e
 - Sentry
 - Node Mailer
 
-### Pict of my project
+## How to install
+1. Clone this repository
+```bash
+git clone https://github.com/amarafiif/express-auth.git
+```
+
+2. Install dependencies
+```node
+npm install
+```
+3. Configure .env
+   You can copy from .env.example or copy this code
+```env
+PORT= 
+DATABASE_URL= 
+
+EMAIL_HOST=
+EMAIL_PORT=
+EMAIL_USER= 
+EMAIL_PASSWORD= 
+
+SENTRY_DSN=
+```
+4. Migrate prisma schema to project
+```node
+npx prisma migrate dev
+```
+
+6. Run this project
+```node
+npm run dev
+```
+![image](https://github.com/amarafiif/express-auth/assets/89902158/6ad049ec-f9b0-46da-86d1-95fed96bb040)
+Akses localhost:3000 di browser anda, maka akan tampil halaman pendaftaran dan menampilkan pesan dari socket io
+
+## Pict of my project
 1. Register Page
 ![image](https://github.com/amarafiif/express-auth/assets/89902158/ec7eb58f-c4ed-4bfd-9650-82e59f7bc8ae)
 
