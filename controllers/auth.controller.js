@@ -1,6 +1,7 @@
 const { users } = require("../models");
 const utils = require("../utils");
 const nodemailer = require("nodemailer");
+const Sentry = require("@sentry/node");
 
 module.exports = {
 	register: async (req, res) => {
@@ -25,10 +26,11 @@ module.exports = {
 			});
 
 			return res.render("success", {
-				successMessage: "You have successfully registered",
+				successMessage: "You have successfully registered!",
 			});
 		} catch (error) {
 			console.error(error);
+			Sentry.captureException(error);
 			return res.render("error", {
 				errorMessage: "An error occurred",
 			});
@@ -45,7 +47,7 @@ module.exports = {
 
 			if (!findUser) {
 				return res.render("error", {
-					errorMessage: "User not found",
+					errorMessage: "User not found!",
 				});
 			}
 
@@ -61,8 +63,8 @@ module.exports = {
 			});
 
 			const transporter = nodemailer.createTransport({
-				host: "sandbox.smtp.mailtrap.io",
-				port: 2525,
+				host: process.env.EMAIL_HOST,
+				port: process.env.EMAIL_PORT,
 				secure: false,
 				auth: {
 					user: process.env.EMAIL_USER,
@@ -91,6 +93,7 @@ module.exports = {
 			});
 		} catch (error) {
 			console.log(error);
+			Sentry.captureException(error);
 			return res.render("error", {
 				errorMessage: "An error occurred",
 			});
@@ -126,6 +129,7 @@ module.exports = {
 			});
 		} catch (error) {
 			console.log(error);
+			Sentry.captureException(error);
 			return res.render("error", {
 				errorMessage: "An error occurred",
 			});
