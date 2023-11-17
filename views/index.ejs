@@ -48,7 +48,37 @@
 						</form>
 					</div>
 				</div>
+				<!-- Toast -->
+				<div id="toast-user-connected" class="flex mt-5 items-center w-full max-w-xs p-4 mb-4 text-gray-400 bg-gray-800 rounded-lg shadow" role="alert">
+					<div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+						<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+						</svg>
+						<span class="sr-only">Check icon</span>
+					</div>
+					<div class="ms-3 text-sm font-normal">Connect to server successfully.</div>
+				</div>
 			</div>
 		</section>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-+Y8gLpYoYo3lVphRoG1jk5rtcsj4ZDqdhlTMcPjOEBo=" crossorigin="anonymous"></script>
+		<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var socket = io();
+
+				socket.on("connect", function () {
+					console.log("Connected to server");
+
+					// Show the user-connected toast notification
+					$("#toast-user-connected").removeClass("hidden");
+
+					// Hide the toast after 3000 milliseconds (3 seconds)
+					setTimeout(function () {
+						$("#toast-user-connected").addClass("hidden");
+					}, 3000);
+				});
+			});
+		</script>
 	</body>
 </html>
