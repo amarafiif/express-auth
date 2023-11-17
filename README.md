@@ -1,6 +1,13 @@
 # express-auth-api
 Implement nodemailer to sent password reset link and push notification to user email.
 
+## Author
+
+- **Author Name**
+  - GitHub: [GitHub Username](https://github.com/amarafiif)
+  - Instagram: [Instagram Username](https://instagram.com/amarafiif)
+  - LinkedIn: [Connect with Me](www.linkedin.com/in/muhammad-ammar-afif-2b9741218)
+
 ## Dependencies i use
 - ExpressJS
 - PrismaJS
